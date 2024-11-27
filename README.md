@@ -13,6 +13,10 @@
 4. [DML (Data Manipulation Language)](#dml)
    - [DML Intermedio](#dml-intermedio)
 5. [SQL Avanzada](#sql-avanzada)
+    - [Test de Pertenencia](#test-de-pertenencia)
+    - [Test de existencia](#test-de-existencia)
+    - [Test ANY-ALL](#test-any-all)
+6. [Vistas](#vistas)
 
 ---
 
@@ -64,32 +68,36 @@ SHOW TABLES;
 
 Diferencia => Not exists
 
-1. select s.name from student as s where major="Computer Science";
+1. 
 
-2. select s.name from student as s where s.major="Mathematics" union select ps.name from student as ps where ps.major="Computer Science";
+```SQL
+select s.name from student as s where major="Computer Science";
 
-3. select * from student as s cross join instructor as i;
+select s.name from student as s where s.major="Mathematics" union select ps.name from student as ps where ps.major="Computer Science";
 
-4. select major from student intersect select major from instructor;
+select * from student as s cross join instructor as i;
 
-5. select i.name from instructor as i where not exists(select * from instructor as ins where ins.instructor_id=i.instructor_id and ins.major="Computer Science");
+select major from student intersect select major from instructor;
 
-5.1 select i.name from instructor i where not exists(select * from instructor ins where ins.instructor_id=i.instructor_id and ins.major="Computer Science");
+select i.name from instructor as i where not exists(select * from instructor as ins where ins.instructor_id=i.instructor_id and ins.major="Computer Science");
 
-5.2 select i.name from instructor i where not exists(select 1 from instructor ins where ins.instructor_id=i.instructor_id and ins.major="Computer Science");
+select i.name from instructor i where not exists(select * from instructor ins where ins.instructor_id=i.instructor_id and ins.major="Computer Science");
 
-6. select * from student natural join enrollments;
+select i.name from instructor i where not exists(select 1 from instructor ins where ins.instructor_id=i.instructor_id and ins.major="Computer Science");
 
-6.1 select * from student natural join enrollments; -> No hace natural join, solo producto cartesiano, no descarta duplicados.
+select * from student natural join enrollments;
 
-7. SELECT * FROM student LEFT OUTER JOIN enrollments ON student.student_id = enrollments.student_id;
+select * from student natural join enrollments; --> No hace natural join, solo producto cartesiano, no descarta duplicados.
 
-7.1 SELECT * FROM student RIGHT OUTER JOIN enrollments ON student.student_id = enrollments.student_id;
+SELECT * FROM student LEFT OUTER JOIN enrollments ON student.student_id = enrollments.student_id;
 
-8. SELECT AVG(salary) AS promedio FROM instructor i GROUP BY department_id;
+SELECT * FROM student RIGHT OUTER JOIN enrollments ON student.student_id = enrollments.student_id;
 
-9. SELECT count(i.name) from instructor as i;
+SELECT AVG(salary) AS promedio FROM instructor i GROUP BY department_id;
 
+SELECT count(i.name) from instructor as i;
+
+```
 
 ### DDL
 
@@ -316,4 +324,61 @@ END$$
 DELIMITER ;
 
 CALL test_comparison();
+```
+
+### TEST DE PERTENENCIA
+
+Test de pertenencia --> `IN` & `NOT IN`
+
+```SQL
+SELECT * FROM instructor WHERE dept_name IN (SELECT dept_name FROM department WHERE budget > 90000.00);
+
+SELECT * FROM student WHERE student.ID NOT IN(SELECT takes.ID FROM takes);
+```
+
+### TEST DE EXISTENCIA
+
+```SQL
+SELECT DISTINCT dept_name FROM instructor i WHERE EXISTS (SELECT t.course_id FROM teaches t WHERE t.ID = i.ID AND semester= 'Fall' AND year = 2017);
+```
+
+### TEST ANY-ALL
+```SQL
+SELECT instructor.name  FROM instructor WHERE (1.5 * salary) > ALL (SELECT budget FROM department);
+
+SELECT instructor.name  FROM instructor WHERE (.60 * salary) > ANY (SELECT budget FROM department);
+```
+
+## Vistas
+
+**Al Actualizar/Borrar/Insertar se actualiza en la tabla**
+
+### Ver Vistas
+```SQL
+show full tables where Table_type = 'VIEW';
+```
+
+### Crear Vista
+
+```SQL
+CREATE VIEW view AS SELECT * FROM table;
+```
+
+## Trigger
+```SQL
+DELIMITER $$
+
+CREATE TRIGGER `salary_control` 
+BEFORE INSERT ON `instructor`
+FOR EACH ROW 
+BEGIN
+    DECLARE msg VARCHAR(255);
+    IF (NEW.ID IS NULL OR NEW.name IS NULL OR NEW.dept_name IS NULL OR NEW.salary IS NULL 
+        OR NEW.ID = '' OR NEW.name = '' OR NEW.dept_name = '') THEN
+        SET msg = 'No se puede ingresar un instructor con campos vacíos';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
+    END IF;
+END$$
+
+DELIMITER ;
 ```
