@@ -17,6 +17,9 @@
     - [Test de existencia](#test-de-existencia)
     - [Test ANY-ALL](#test-any-all)
 6. [Vistas](#vistas)
+    -[Ver Vistas](#ver-vistas)
+    -[Crear Vistas](#crear-vista)
+7. [Trigger](#trigger)
 
 ---
 
