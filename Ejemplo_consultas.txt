@@ -27,11 +27,13 @@ SELECT * FROM student NATURAL RIGHT OUTER JOIN takes;
 
 ESTRUCTURA DE UN PROCEDURE
 DELIMITER $$
+
 CREATE PROCEDURE consultas_nombrePersona()
-BEGIN 
---Todas las consultas de cada persona, tanto individuales como grupales
+BEGIN
+    --Todas las consultas tanto individuales como grupales de cada persona
 END$$
-DELIMITER;
+
+DELIMITER ;
 
 
 
