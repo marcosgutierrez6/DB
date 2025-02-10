@@ -15,10 +15,10 @@
 
 Por defecto, MongoDB arranca sin autenticación. Para activarla, se puede:
 
-### a) Iniciar el servidor usando la opción `--auth`:
+### a) Iniciar el servidor usando la opción `--auth` despues de crear un usuario:
 
 ```bash
-mongod --auth --port 27017 --dbpath /ruta/a/tu/db
+mongod --auth
 
 # mongod.conf
 security:
