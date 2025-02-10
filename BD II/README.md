@@ -43,7 +43,7 @@ db.createUser({
 ## 4. Reiniciar MongoDB con Autenticación
 
 ```bash
-mongod --auth --port 27017 --dbpath /ruta/a/tu/db
+mongod --auth
 
 mongo --port 27017 -u "admin" -p "tu_contraseña_segura" --authenticationDatabase "admin"
 ```
