@@ -5,9 +5,8 @@
 1. [Habilitar la Autenticación en MongoDB](#1-habilitar-la-autenticación-en-mongodb)
    - [a) Iniciar el servidor usando la opción `--auth`](#a-iniciar-el-servidor-usando-la-opción--auth)
 2. [Creación de la Primera Instancia y Usuario Administrador](#2-creación-de-la-primera-instancia-y-usuario-administrador)
-3. [Crear el usuario administrador](#3-crear-el-usuario-administrador)
-4. [Reiniciar MongoDB con Autenticación](#4-reiniciar-mongodb-con-autenticación)
-5. [Creación de Roles y Usuarios Específicos](#5-creación-de-roles-y-usuarios-específicos)
+3. [Reiniciar MongoDB con Autenticación](#4-reiniciar-mongodb-con-autenticación)
+4. [Creación de Roles y Usuarios Específicos](#5-creación-de-roles-y-usuarios-específicos)
    - [Usuario con rol personalizado](#usuario-con-rol-personalizado)
 
 
@@ -27,14 +26,6 @@ security:
 ```
 
 ## 2. Creación de la Primera Instancia y Usuario Administrador
-
-```bash
-mongod --port 27017 --dbpath /ruta/a/tu/db
-
-mongo --port 27017
-```
-
-## 3. Crear el usuario administrador
 
 ```bash
 use admin
